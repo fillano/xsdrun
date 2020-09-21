@@ -10,14 +10,8 @@ Array.prototype.asyncReduce = async function(cb, init) {
     return pre;
 };
 
-(async () => await main(args))()
-.then((result) => {
-    console.log(JSON.stringify(result, null, 2));
-}, (reject) => {
-    console.log(reject);
-})
-.then(()=>{},(reason)=>console.log(reason))
-.catch((reason) => console.log(reason));
+main(args)
+.catch(reason=>console.log(reason));
 
 async function main(args) {
     if(args._.length < 1) return help();
@@ -25,7 +19,7 @@ async function main(args) {
         let data = await readFile(cur);
         return deepMerge(pre, xsd_parser(new DOMParser().parseFromString(data)));
     }, {});
-    return result;
+    console.log(JSON.stringify(result, null, 2));
 }
 
 function deepMerge(target, source) {
@@ -70,7 +64,7 @@ function xsd_parser(doc) {
         }
         return pre;
     }, {});
-    return {elements/*, complexTypes*/};
+    return {elements, complexTypes};
 }
 
 async function readFile(filename) {
